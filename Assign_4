@@ -1,0 +1,117 @@
+#include <iostream>
+
+#include <thread>
+
+#include <string>
+
+//creating four threads
+
+void input_thread(std::string& s)
+
+{
+
+    //here the first thread is taking the string from the user and restoring it in variable s
+
+    std::cout << "Enter a string: ";
+
+    std::getline(std::cin, s);  
+
+}
+
+
+
+void reverse_thread(const std::string& s)
+
+{
+
+    //Now the 2nd thread is reversing the string and output it
+
+    std::string reversed_s(s.rbegin(), s.rend());
+
+    std::cout << "Reversed string is: " << reversed_s << std::endl;
+
+}
+
+void capital_thread(const std::string& s)
+
+{
+
+    //Third thread is capitalizing the characters of the string
+
+    std::string capital_string; //declaring a variable capital string
+
+    for (char c : s)
+
+        capital_string += toupper(c); //by using "toupper" capitalizing the string
+
+    std::cout << "Capitalized string is: " << capital_string << std::endl;
+
+}
+
+//main thread
+
+void shift_thread(const std::string& s)
+
+{
+
+    //Four thread will shift each characters of the string 2 times
+
+    std::string shift_char; //declaring a variable shift_char
+
+    for (char c : s)
+
+        shift_char += (c + 2); //shifting character by 2 times in a string
+
+    std::cout << "Shifted string is: " << shift_char << std::endl;
+
+}
+
+
+
+int main()
+
+{
+
+    std::string s;
+
+
+
+    // Create the first thread to input the string
+
+    std::thread t1(input_thread, std::ref(s));
+
+    //here every threads receive the constant reference to the str variable as an argument and performs its respective operation on the string.
+
+    // Waiting for the first thread to finish
+
+    t1.join();
+
+
+
+    // Create the other three threads 
+
+    std::thread t2(reverse_thread, std::cref(s));
+
+    std::thread t3(capital_thread, std::cref(s));
+
+    std::thread t4(shift_thread, std::cref(s));
+
+
+
+    // Waiting for the threads to finish
+
+    t2.join();
+
+    t3.join();
+
+    t4.join();
+
+    //All the threads wait for the input thread when here input thread finishes its task then
+
+    //the other waiting threads t2,t3,t4 start doing their work. 
+
+
+
+    return 0;
+
+}
